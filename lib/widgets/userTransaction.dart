@@ -3,6 +3,7 @@ import '../model/transactions.dart';
 import 'package:flutter/material.dart';
 
 import 'cards_transaction.dart';
+import 'chart.dart';
 import 'input_transaction.dart';
 
 class UserTransaction extends StatefulWidget {
@@ -15,7 +16,7 @@ class UserTransaction extends StatefulWidget {
 class _TransactionState extends State<UserTransaction> {
   List<Transaction> transactionlist = [
     Transaction(
-        amount: 12.00, id: "1", date: DateTime.now(), item: "New Shoes"),
+        amount: 12.00, id: "1", date: DateTime.now().subtract(Duration(days: 3)), item: "New Shoes"),
     Transaction(amount: 20.00, id: "2", date: DateTime.now(), item: "T shirt"),
     Transaction(amount: 55.00, id: "3", date: DateTime.now(), item: "Boxer"),
   ];
@@ -29,6 +30,20 @@ class _TransactionState extends State<UserTransaction> {
     setState(() {
       transactionlist.add(t1);
     });
+  }
+
+  List<Transaction> get _recentTransactions {
+    List<Transaction> recent= [];
+    for(int i=0; i< transactionlist.length ; i++){
+      if(transactionlist[i].date.isAfter(DateTime.now().subtract(Duration(days: 7)))){
+        recent.add(transactionlist[i]);
+      }
+      return recent;
+    }
+/*    transactionlist.where((element){
+      print(element.date.isAfter(DateTime.now().subtract(Duration(days: 7))).toString());
+      return element.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();*/
   }
 
   void _startAddNewTransaction(BuildContext ctx) {
@@ -58,29 +73,13 @@ class _TransactionState extends State<UserTransaction> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Container(
-          decoration: BoxDecoration(
-             image: DecorationImage(
-              image: AssetImage("assets/images/waiting.png",),
-        )
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Card(
-                color: Colors.red,
-                child: Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.all(10),
-                    child: Text(
-                      "Chart",
-                      style: TextStyle(fontFamily: "OpenSans"),
-                    )),
-              ),
-              // InputTransaction(onPressedHandler: addTransaction,),
-              CardTransaction(listTransaction: transactionlist)
-            ],
-          ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Chart(recentTransactions: _recentTransactions,),
+            // InputTransaction(onPressedHandler: addTransaction,),
+            CardTransaction(listTransaction: transactionlist)
+          ],
         ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
