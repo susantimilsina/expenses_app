@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 class InputTransaction extends StatelessWidget {
   Function onPressedHandler;
-  InputTransaction({Key key, this.onPressedHandler}) : super(key: key);
+  TextEditingController itemController;
+  TextEditingController amountController;
+  InputTransaction({Key key, this.onPressedHandler, this.itemController, this.amountController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
-    final itemController = TextEditingController();
-    final amountController = TextEditingController();
-
     return Card(
       child: Container(
         margin: EdgeInsets.all(10),

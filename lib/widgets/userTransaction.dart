@@ -20,6 +20,8 @@ class _TransactionState extends State<UserTransaction> {
     Transaction(amount: 20.00, id: "2", date: DateTime.now(), item: "T shirt"),
     Transaction(amount: 55.00, id: "3", date: DateTime.now(), item: "Boxer"),
   ];
+  final itemController = TextEditingController();
+  final amountController = TextEditingController();
 
   addTransaction(itemName, amount) {
     Transaction t1 = new Transaction(
@@ -29,6 +31,8 @@ class _TransactionState extends State<UserTransaction> {
         date: DateTime.now());
     setState(() {
       transactionlist.add(t1);
+      itemController.text ="";
+      amountController.text="";
     });
   }
 
@@ -53,12 +57,28 @@ class _TransactionState extends State<UserTransaction> {
         return GestureDetector(
           onTap: () {},
           child: SingleChildScrollView(
-              child: InputTransaction(onPressedHandler: addTransaction)),
+              child: InputTransaction(onPressedHandler: addTransaction, itemController: itemController, amountController: amountController,)),
           behavior: HitTestBehavior.opaque,
         );
       },
     );
   }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    itemController.dispose();
+    amountController.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
